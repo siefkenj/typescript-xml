@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element xmlns:xx="foo:bar" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="">
+  <choice>
+    <name>except</name>
+    <a:documentation>sss</a:documentation>
+    <name>ss</name>
+  </choice>
+  <optional>
+    <attribute name="ns"/>
+  </optional>
+  <optional>
+    <attribute name="datatypeLibrary">
+      <ref name="anyURI"/>
+    </attribute>
+  </optional>
+  <zeroOrMore>
+    <element>
+      <nsName ns="foo:bar">
+        <except>
+          <name ns="">mar</name>
+        </except>
+      </nsName>
+      <data type="string">
+        <except>
+          <ref name="foo"/>
+        </except>
+      </data>
+    </element>
+  </zeroOrMore>
+</element>

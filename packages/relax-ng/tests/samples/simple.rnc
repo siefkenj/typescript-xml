@@ -1,0 +1,14 @@
+namespace xx="foo:bar"
+
+element 
+##sss
+
+except|ss
+{
+ (
+ attribute ns { text }?,
+ attribute datatypeLibrary { anyURI }?,
+ element xx:* - mar {string - foo }*
+ )
+}
+
