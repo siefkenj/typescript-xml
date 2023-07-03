@@ -1,10 +1,8 @@
 import util from "util";
+import { describe, it, expect } from "vitest";
 import * as lezerXml from "@lezer/xml";
 import { fromXml } from "xast-util-from-xml";
 import * as fs from "node:fs/promises";
-import { DocumentCstNode, parse as xmlToolsParse } from "@xml-tools/parser";
-import { buildAst } from "@xml-tools/ast";
-import { getSuggestions } from "@xml-tools/content-assist";
 import { lezerNodeToXastNode, lezerToXast } from "../src/lezer/lezer-to-xast";
 import { lezerParsingDiagnosticsForString } from "../src/lezer/lezer-diagnostics";
 
@@ -35,7 +33,7 @@ describe("XML Parse", () => {
         //source = `<foo><>bar</></foo>`
 
         lezerParsingDiagnosticsForString(source);
-        console.log(lezerToXast(source))
+        console.log(lezerToXast(source));
 
         //console.time("lezer");
         //lezerToXast(source);

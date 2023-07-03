@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import util from "util";
 import { fromXml } from "xast-util-from-xml";
 import * as fs from "node:fs/promises";
