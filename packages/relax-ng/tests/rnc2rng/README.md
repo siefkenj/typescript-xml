@@ -1,0 +1,1 @@
+Samples taken from the `rng2rnc` repository: https://github.com/djc/rnc2rng

@@ -121,7 +121,6 @@ describe.only("Relax-ng Compact", () => {
                 `bar>>baz[]`,
                 `bar`,
                 // annotated except
-
                 `*-foo`,
                 `* - foo`,
                 `*-(foo|bar)`,
