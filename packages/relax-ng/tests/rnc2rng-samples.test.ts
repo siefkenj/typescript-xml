@@ -2,7 +2,7 @@ import { glob } from "glob";
 import fs from "node:fs/promises";
 import path from "node:path";
 import util from "util";
-import { RelaxNgCompactPegParser } from "../src/parser/parsers";
+import { parseRnc } from "../src/parser/parsers";
 
 /* eslint-env jest */
 
@@ -11,8 +11,6 @@ const origLog = console.log;
 console.log = (...args) => {
     origLog(...args.map((x) => util.inspect(x, false, 10, true)));
 };
-
-const parse = RelaxNgCompactPegParser.parse;
 
 describe.only("Relax-ng Compact samples from rnc2rng", async () => {
     // Get all the fragment files
@@ -27,7 +25,7 @@ describe.only("Relax-ng Compact samples from rnc2rng", async () => {
         const fileName = path.basename(await file);
         const fragment = await samplePromise;
         it(`Can parse ${fileName}`, () => {
-            parse(fragment);
+            parseRnc(fragment);
         });
     }
 });

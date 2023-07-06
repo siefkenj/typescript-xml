@@ -119,10 +119,10 @@ patternPrimary
             return { type: "attribute", name, content, position: location() };
         }
     / "list" _ "{" _ content:pattern _ "}" {
-            return { type: "list", name, content, position: location() };
+            return { type: "list", content, position: location() };
         }
     / "mixed" _ "{" _ content:pattern _ "}" {
-            return { type: "mixed", name, content, position: location() };
+            return { type: "mixed", content, position: location() };
         }
     / "parent" WS name:identifier {
             return { type: "parentRef", name, position: location() };
@@ -154,7 +154,7 @@ datatype
         _
         except:exceptPattern? {
             return {
-                type: "datatype",
+                type: "datatypeExcept",
                 name,
                 params: params || [],
                 except,
@@ -174,7 +174,15 @@ param
                 : content;
         }
 
-paramBase "param" = identifierOrKeyword _ "=" _ literal
+paramBase "param"
+    = name:identifierOrKeyword _ "=" _ value:literal {
+            return {
+                type: "param",
+                name,
+                value,
+                position: location(),
+            };
+        }
 
 exceptPattern "exceptPattern"
     = "-" _ content:pattern {
@@ -204,6 +212,7 @@ grammarContentBase "grammarContent"
         uri:anyURILiteral
         _
         inherit:inherit?
+        _
         content:("{" _ x:includeContent* _ "}" { return x; })? {
             return {
                 type: "include",
@@ -293,10 +302,20 @@ nameClassPrimary
 
 nameClassPrimaryBase
     = name:anyName _ except:exceptNameClass? {
-            return { type: "nameclass", name, except, position: location() };
+            return {
+                type: "nameclassExcept",
+                name,
+                except,
+                position: location(),
+            };
         }
     / name:nsName _ except:exceptNameClass? {
-            return { type: "nameclass", name, except, position: location() };
+            return {
+                type: "nameclassExcept",
+                name,
+                except,
+                position: location(),
+            };
         }
     / name:name { return { type: "nameclass", name, position: location() }; }
     / "(" _ x:nameClass _ ")" { return x; }
@@ -320,7 +339,7 @@ namespaceURILiteral "namespaceURILiteral"
     = literal
     / "inherit"
 
-inherit "inherit" = "inherit" _ "=" _ identifierOrKeyword
+inherit "inherit" = "inherit" _ "=" _ @identifierOrKeyword
 
 identifierOrKeyword "identifierOrKeyword"
     = identifier

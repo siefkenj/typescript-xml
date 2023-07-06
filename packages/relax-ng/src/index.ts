@@ -1,1 +1,3 @@
-export const dummyVar = "dummyVar";
+import { parseRnc } from "./parser/parsers";
+
+export { parseRnc };

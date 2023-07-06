@@ -86,7 +86,7 @@ type Pattern =
 type AnnotatedPatternPrimary =
     | PatternSecondary
     | {
-          type: string;
+          type: "annotated";
           content: PatternSecondary;
           annotations: Annotations;
           followAnnotations: never[] | NonNullable<FollowAnnotations | null>;
@@ -223,7 +223,7 @@ type Datatype =
           };
       }
     | {
-          type: "datatype";
+          type: "datatypeExcept";
           name: DatatypeName;
           params: never[] | NonNullable<Param[] | null>;
           except: ExceptPattern | null;
@@ -233,19 +233,29 @@ type Datatype =
               end: { offset: number; line: number; column: number };
           };
       };
-type Param =
+export type Param =
     | ParamBase
     | {
-          type: string;
+          type: "annotated";
           content: ParamBase;
           annotations: Annotations;
+          followAnnotations?: [];
           position: {
               source: string | undefined;
               start: { offset: number; line: number; column: number };
               end: { offset: number; line: number; column: number };
           };
       };
-type ParamBase = [IdentifierOrKeyword, _, "=", _, Literal];
+type ParamBase = {
+    type: "param";
+    name: Name;
+    value: Literal;
+    position: {
+        source: string | undefined;
+        start: { offset: number; line: number; column: number };
+        end: { offset: number; line: number; column: number };
+    };
+};
 type ExceptPattern = {
     type: "except";
     content: Pattern;
@@ -258,9 +268,10 @@ type ExceptPattern = {
 type GrammarContent =
     | GrammarContentBase
     | {
-          type: string;
+          type: "annotated";
           content: GrammarContentBase;
           annotations: Annotations;
+          followAnnotations?: [];
           position: {
               source: string | undefined;
               start: { offset: number; line: number; column: number };
@@ -294,9 +305,10 @@ type GrammarContentBase =
 type IncludeContent =
     | IncludeContentBase
     | {
-          type: string;
+          type: "annotated";
           content: IncludeContentBase;
           annotations: Annotations;
+          followAnnotations?: [];
           position: {
               source: string | undefined;
               start: { offset: number; line: number; column: number };
@@ -338,7 +350,7 @@ type Define = {
     };
 };
 type AssignMethod = "=" | "|=" | "&=";
-type NameClass = {
+export type NameClass = {
     type: "nameclassList";
     content: AnnotatedNameClass[];
     position: {
@@ -350,7 +362,7 @@ type NameClass = {
 type AnnotatedNameClass =
     | NameClassPrimary
     | {
-          type: string;
+          type: "annotated";
           content: NameClassPrimary;
           annotations: Annotations;
           followAnnotations: never[] | NonNullable<FollowAnnotations | null>;
@@ -363,9 +375,10 @@ type AnnotatedNameClass =
 type NameClassPrimary =
     | NameClassPrimaryBase
     | {
-          type: string;
+          type: "annotated";
           content: NameClassPrimaryBase;
           annotations: Annotations;
+          followAnnotations?: [];
           position: {
               source: string | undefined;
               start: { offset: number; line: number; column: number };
@@ -374,7 +387,7 @@ type NameClassPrimary =
       };
 type NameClassPrimaryBase =
     | {
-          type: "nameclass";
+          type: "nameclassExcept";
           name: AnyName;
           except: ExceptNameClass | null;
           position: {
@@ -384,7 +397,7 @@ type NameClassPrimaryBase =
           };
       }
     | {
-          type: "nameclass";
+          type: "nameclassExcept";
           name: NsName;
           except: ExceptNameClass | null;
           position: {
@@ -409,13 +422,13 @@ type DatatypeName = CName | "string" | "token";
 type DatatypeValue = Literal;
 type AnyURILiteral = Literal;
 type NamespaceURILiteral = Literal | "inherit";
-type Inherit = ["inherit", _, "=", _, IdentifierOrKeyword];
+type Inherit = IdentifierOrKeyword;
 type IdentifierOrKeyword = Identifier | Keyword;
 type Identifier = string;
 type CName = string;
 type NsName = string;
 type AnyName = "*";
-type Literal = {
+export type Literal = {
     type: "literal";
     parts: LiteralSegment[];
     position: {
@@ -459,7 +472,7 @@ type FollowAnnotations = (AnnotationElement extends (infer InnerArr)[]
     ? InnerArr
     : AnnotationElement)[];
 type AnnotationAttributes = AnnotationAttribute[];
-type AnnotationAttribute = {
+export type AnnotationAttribute = {
     type: "annotationAttribute";
     name: Name;
     value: Literal;
@@ -495,7 +508,7 @@ type Annotations = ((Documentation | Annotation)[] extends (infer InnerArr)[]
         : InnerArr
     : (Documentation | Annotation)[])[];
 type Documentation = DocumentationLine[];
-type DocumentationLine = {
+export type DocumentationLine = {
     type: "documentationLine";
     content: string;
     position: {
@@ -529,7 +542,7 @@ type Newline = string[];
 type _ = [Comment, _] | string[];
 type WS = [Comment, _] | string[];
 type Comment = {
-    type: string;
+    type: "comment";
     content: string;
     position: {
         source: string | undefined;
