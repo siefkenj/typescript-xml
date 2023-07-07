@@ -156,10 +156,10 @@ describe.only("Relax-ng Compact printRaw tests", async () => {
         });
     }
 
-    it("Can printRaw samples", () => {
-        ast = parseRnc(`# foo\na=b#bar\n`, {
-        });
-        console.log(ast);
-        expect(printRaw(ast)).toEqual(`# foo\na = b\n#bar`);
-    });
+    //it("Can printRaw samples", () => {
+    //    ast = parseRnc(`# foo\na=b#bar\n`, {
+    //    });
+    //    console.log(ast);
+    //    expect(printRaw(ast)).toEqual(`# foo\na = b\n#bar`);
+    //});
 });

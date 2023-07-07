@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import util from "util";
 import { parseRnc } from "../src/parser/parsers";
+import { printRaw } from "../src/printer/rnc/print-raw";
 
 /* eslint-env jest */
 
@@ -26,6 +27,13 @@ describe.only("Relax-ng Compact samples from rnc2rng", async () => {
         const fragment = await samplePromise;
         it(`Can parse ${fileName}`, () => {
             parseRnc(fragment);
+        });
+
+        it(`Is consistent when ${fileName} is parsed twice`, () => {
+            const parsed = parseRnc(fragment);
+            const printed = printRaw(parsed);
+            const parsedAgain = parseRnc(printed);
+            expect(printRaw(parsedAgain)).toEqual(printed);
         });
     }
 });
