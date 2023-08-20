@@ -1,6 +1,6 @@
 import esbuild from "esbuild";
 import fs from "node:fs/promises";
-//import {pegjsLoader} from "./scripts/esbuild-pegjs-loader.mjs";
+import { pegjsLoader } from "./scripts/esbuild-pegjs-loader.mjs";
 
 (async () => {
     const packageJson = JSON.parse(
@@ -19,6 +19,7 @@ import fs from "node:fs/promises";
         format: "esm",
         target: "node16",
         platform: "node",
+        plugins: [pegjsLoader()],
         external: [...explicitDeps],
     };
 
